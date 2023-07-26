@@ -9,8 +9,8 @@ import {
 } from "./styledComponents";
 
 const GameResultView = (props) => {
-  const { myChoice, apponentChoice, resultMessage, playAgain } = props;
-  const { id, image } = apponentChoice;
+  const { myChoice, opponentChoice, resultMessage, playAgain } = props;
+  const { image } = opponentChoice;
 
   const onClickPlayAgainButton = () => {
     playAgain();

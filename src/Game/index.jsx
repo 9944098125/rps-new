@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React from "react";
 import Popup from "reactjs-popup";
 import { RiCloseLine } from "react-icons/ri";
 import Buttons from "../Buttons";
@@ -21,108 +21,85 @@ import {
   CloseLineButton,
 } from "./styledComponents";
 
-class Game extends Component {
-  state = {
+export default function Game(props) {
+  const { choicesList } = props;
+  const [values, setValues] = React.useState({
     showResult: false,
     myChoice: {},
-    apponentChoice: {},
-    score: 0,
+    opponentChoice: {},
     resultMessage: "",
+  });
+
+  const [score, setScore] = React.useState(0);
+
+  const onClickPlayAgain = () => {
+    setValues({ showResult: false });
   };
 
-  onClickPlayAgain = () => this.setState({ showResult: false });
-
-  onGetResult = () => {
-    const { myChoice, apponentChoice, resultMessage } = this.state;
-    return (
-      <GameResultView
-        myChoice={myChoice}
-        apponentChoice={apponentChoice}
-        resultMessage={resultMessage}
-        playAgain={this.onClickPlayAgain}
-      />
-    );
-  };
-
-  onGetButtonId = (id, image) => {
-    const { choicesList } = this.props;
+  function onGetButtonId(id, image) {
     const number = Math.floor(Math.random() * choicesList.length);
     if (choicesList[number].id === "ROCK" && id === "SCISSORS") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score - 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU LOSE",
-      }));
+      });
+      setScore((prevState) => prevState - 1);
+      console.log(values.score);
     } else if (choicesList[number].id === "ROCK" && id === "PAPER") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score + 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU WON",
-      }));
+      });
+      setScore((prevState) => prevState + 1);
     } else if (choicesList[number].id === "SCISSORS" && id === "ROCK") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score + 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU WON",
-      }));
+      });
+      setScore((prevState) => prevState + 1);
     } else if (choicesList[number].id === "SCISSORS" && id === "PAPER") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score - 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU LOSE",
-      }));
+      });
+      setScore((prevState) => prevState - 1);
     } else if (choicesList[number].id === "PAPER" && id === "ROCK") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score - 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU LOSE",
-      }));
+      });
+      setScore((prevState) => prevState - 1);
     } else if (choicesList[number].id === "PAPER" && id === "SCISSORS") {
-      this.setState((prevState) => ({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
-        score: prevState.score + 1,
+        opponentChoice: choicesList[number],
         resultMessage: "YOU WON",
-      }));
+      });
+      setScore((prevState) => prevState + 1);
     } else {
-      this.setState({
+      setValues({
         showResult: true,
         myChoice: [id, image],
-        apponentChoice: choicesList[number],
+        opponentChoice: choicesList[number],
         resultMessage: "IT IS DRAW",
       });
+      setScore((prevState) => prevState + 0);
     }
-  };
+  }
 
-  onGetImages = () => {
-    const { choicesList } = this.props;
-    return (
-      <ItemsImagesContainer>
-        {choicesList.map((eachItem) => (
-          <Buttons
-            key={eachItem.id}
-            buttonDetails={eachItem}
-            onGetId={this.onGetButtonId}
-          />
-        ))}
-      </ItemsImagesContainer>
-    );
-  };
-
-  render() {
-    const { showResult, score } = this.state;
-    return (
+  return (
+    <React.Fragment>
       <MainContainer>
         <ScoreContainer>
           <ItemsContainer>
@@ -139,7 +116,20 @@ class Game extends Component {
             <ScoreSpan>{score}</ScoreSpan>
           </ScoreCardContainer>
         </ScoreContainer>
-        {showResult ? this.onGetResult() : this.onGetImages()}
+        {values.showResult ? (
+          <GameResultView
+            myChoice={values.myChoice}
+            opponentChoice={values.opponentChoice}
+            resultMessage={values.resultMessage}
+            playAgain={onClickPlayAgain}
+          />
+        ) : (
+          <ItemsImagesContainer>
+            {choicesList.map((each, idx) => (
+              <Buttons key={idx} buttonDetails={each} onGetId={onGetButtonId} />
+            ))}
+          </ItemsImagesContainer>
+        )}
         <PopUpContainer>
           <Popup modal trigger={<PopUpButton type="button">Rules</PopUpButton>}>
             {(close) => (
@@ -158,8 +148,6 @@ class Game extends Component {
           </Popup>
         </PopUpContainer>
       </MainContainer>
-    );
-  }
+    </React.Fragment>
+  );
 }
-
-export default Game;
