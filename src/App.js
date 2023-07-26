@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import Game from "./Game";
+import "./App.css";
+
+const choicesList = [
+  {
+    id: "ROCK",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Fist.svg/1122px-Fist.svg.png",
+  },
+  {
+    id: "SCISSORS",
+    image: "https://www.rock-paper-scissors-game.com/i/scissors.png",
+  },
+  {
+    id: "PAPER",
+    image:
+      "https://cdn.pixabay.com/photo/2014/04/02/16/16/hand-306763_1280.png",
+  },
+];
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <Game choicesList={choicesList} />;
 }
 
 export default App;
